@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.136
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WxHandle.Core", "WxHandle.Core\WxHandle.Core.csproj", "{F58C53BF-E135-4917-9CE7-8F444F745DAB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WxHandle.Test", "WxHandle.Test\WxHandle.Test.csproj", "{C88388D7-6B20-444C-9A9C-C58AE5DDCD0B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F58C53BF-E135-4917-9CE7-8F444F745DAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F58C53BF-E135-4917-9CE7-8F444F745DAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F58C53BF-E135-4917-9CE7-8F444F745DAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F58C53BF-E135-4917-9CE7-8F444F745DAB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C88388D7-6B20-444C-9A9C-C58AE5DDCD0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C88388D7-6B20-444C-9A9C-C58AE5DDCD0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C88388D7-6B20-444C-9A9C-C58AE5DDCD0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C88388D7-6B20-444C-9A9C-C58AE5DDCD0B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {345DCD8B-CD35-4818-B282-AFE770525BB8}
+	EndGlobalSection
+EndGlobal
