@@ -1,6 +1,6 @@
-﻿namespace WxHandle.Core
+﻿namespace WxHandle.Core.Models
 {
-    public class PayCallbackData
+    public class PayCallbackData: BaseWxResult,IHasSignModel
     {
         /// <summary>
         /// 应用ID

@@ -4,6 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using WxHandle.Core.Models;
+using WxHandle.Core.Options;
+using WxHandle.Core.Interfaces;
 
 namespace WxHandle.Core
 {
@@ -17,18 +21,20 @@ namespace WxHandle.Core
         {
             _next = next;
             this.path = path;
-        } 
+        }
 
-        public async Task Invoke(HttpContext context, IOptions<WxConfig> options, IWxHandle wxHandle,WxXmlHelp xmlHelp)
+        public async Task Invoke(HttpContext context, IOptions<WxConfig> options, IWxHandle wxHandle)
         {
             var config = options.Value;
             if (context.Request.Path.HasValue)
             {
-                if (context.Request.Method == "POST" && context.Request.Path.Value == config.PayCallbackPath)
+                if (context.Request.Method == "POST" && context.Request.Path.Value == config.Pay_Notify_Url)
                 {
-                    var cbModel = await xmlHelp.ReadAsXmlFromBody<PayCallbackData>(context.Request.Body);
+                    var xmlHelp = context.RequestServices.GetService<WxXmlHelp>();
+                    var cbModel = await xmlHelp.ReadFromStream<PayCallbackData>(context.Request.Body);
                     var result = await wxHandle.PayCallback(cbModel);
-                    await context.Response.WriteAsync(result);                   
+                    var xml = xmlHelp.WriteToXml(result);
+                    await context.Response.WriteAsync(xml);
                 }
             }
             else

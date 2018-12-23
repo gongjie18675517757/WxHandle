@@ -1,9 +1,12 @@
 using AutoMoqCore;
+using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
 using System.Threading.Tasks;
 using System.Xml;
 using WxHandle.Core;
+using WxHandle.Core.Models;
+using WxHandle.Core.Options;
 
 namespace WxHandle.Test
 {
@@ -25,17 +28,19 @@ namespace WxHandle.Test
   <out_trade_no><![CDATA[1409811653]]></out_trade_no>
   <result_code><![CDATA[SUCCESS]]></result_code>
   <return_code><![CDATA[SUCCESS]]></return_code>
-  <sign><![CDATA[B552ED6B279343CB493C5DD0D78AB241]]></sign>
-  <sub_mch_id><![CDATA[10000100]]></sub_mch_id>
+  <sign><![CDATA[B552ED6B279343CB493C5DD0D78AB241]]></sign>   
   <time_end><![CDATA[20140903131540]]></time_end>
   <total_fee>1</total_fee><coupon_fee><![CDATA[10]]></coupon_fee>
-<coupon_count><![CDATA[1]]></coupon_count>
-<coupon_type><![CDATA[CASH]]></coupon_type>
+<coupon_count><![CDATA[1]]></coupon_count> 
 <coupon_id><![CDATA[10000]]></coupon_id>
 <coupon_fee_0><![CDATA[100]]></coupon_fee_0>
   <trade_type><![CDATA[JSAPI]]></trade_type>
   <transaction_id><![CDATA[1004400740201409030005092168]]></transaction_id>
 </xml>";
+
+            var doc = new XmlDocument();
+            doc.LoadXml(xml);             
+            xml = doc.OuterXml;
         }
 
         [TestMethod]
@@ -74,11 +79,11 @@ namespace WxHandle.Test
                 stream);
 
             // Assert
-            Assert.AreEqual(result,xml);
+            Assert.AreEqual(result, xml);
         }
 
         [TestMethod]
-        public async Task readAsXmlFromBody_StateUnderTest_ExpectedBehavior()
+        public void readAsXmlFromBody_StateUnderTest_ExpectedBehavior()
         {
             // Arrange
             var mocker = new AutoMoqer();
@@ -86,7 +91,7 @@ namespace WxHandle.Test
             string xml = this.xml;
 
             // Act
-            var result = await unitUnderTest.ReadAsXmlFromBody<PayCallbackData>(
+            var result = unitUnderTest.ReadFromXml<PayCallbackData>(
                 xml);
 
             // Assert
@@ -104,11 +109,53 @@ namespace WxHandle.Test
             stream.Position = 0;
 
             // Act
-            var result = await unitUnderTest.ReadAsXmlFromBody<PayCallbackData>(
+            var result = await unitUnderTest.ReadFromStream<PayCallbackData>(
                 stream);
 
             // Assert
             Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
+        public void ReadXml_StateUnderTest_ExpectedBehavior1()
+        {
+            // Arrange
+            var mocker = new AutoMoqer();
+            var unitUnderTest = mocker.Create<WxXmlHelp>();
+
+            // Act
+            var result = unitUnderTest.ReadFromXml<PayCallbackData>(
+                xml);
+
+            // Assert
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
+        public void WriteToXml_StateUnderTest_ExpectedBehavior()
+        {
+            var mocker = new AutoMoqer();
+            var unitUnderTest = mocker.Create<WxXmlHelp>();
+            var todo = unitUnderTest.ReadFromXml<PayCallbackData>(xml);
+
+            var result = unitUnderTest.WriteToXml(todo);
+
+            Assert.IsTrue(unitUnderTest.CompareXml(result,xml));
+        }
+
+        [TestMethod]
+        public void CreateSign_StateUnderTest_ExpectedBehavior()
+        {
+            var mocker = new AutoMoqer();
+            mocker.GetMock<IOptions<WxConfig>>().Setup(x => x.Value).Returns(new WxConfig()
+            {
+
+            });
+            var unitUnderTest = mocker.Create<WxXmlHelp>();
+
+            var todo = unitUnderTest.ReadFromXml<PayCallbackData>(xml);
+
+            Assert.Fail();
         }
     }
 }
