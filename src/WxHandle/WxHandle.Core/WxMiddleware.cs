@@ -23,7 +23,7 @@ namespace WxHandle.Core
             this.path = path;
         }
 
-        public async Task Invoke(HttpContext context, IOptions<WxConfig> options, IWxHandle wxHandle)
+        public async Task Invoke(HttpContext context, IOptions<WxConfig> options, IWxPayHandle wxHandle)
         {
             var config = options.Value;
             if (context.Request.Path.HasValue)
@@ -32,9 +32,12 @@ namespace WxHandle.Core
                 {
                     var xmlHelp = context.RequestServices.GetService<WxXmlHelp>();
                     var cbModel = await xmlHelp.ReadFromStream<PayCallbackData>(context.Request.Body);
-                    var result = await wxHandle.PayCallback(cbModel);
-                    var xml = xmlHelp.WriteToXml(result);
-                    await context.Response.WriteAsync(xml);
+                    await wxHandle.PayCallback(cbModel); 
+                    await context.Response.WriteAsync(@"<xml>
+  <return_code><![CDATA[SUCCESS]]></return_code>
+  <return_msg><![CDATA[OK]]></return_msg>
+</xml>");
+
                 }
             }
             else

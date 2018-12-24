@@ -6,6 +6,6 @@
     public enum SignMode
     {
         MD5,
-        SHA256
+        HmacSHA256
     }
 }

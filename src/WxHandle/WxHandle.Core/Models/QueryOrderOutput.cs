@@ -1,7 +1,15 @@
 ﻿namespace WxHandle.Core.Models
 {
-    public class PayCallbackData: BaseWxResult,IHasSignModel
-    { 
+    /// <summary>
+    /// 查询支付订单返回
+    /// </summary>
+    public class QueryOrderOutput: BaseWxResult
+    {
+        /// <summary>
+        /// 设备号
+        /// </summary>
+        public string device_info { get; set; }
+
         /// <summary>
         /// 用户标识
         /// </summary>
@@ -16,6 +24,18 @@
         /// 交易类型
         /// </summary>
         public string trade_type { get; set; }
+
+        /// <summary>
+        /// 交易状态
+        /// SUCCESS—支付成功
+        /// REFUND—转入退款
+        /// NOTPAY—未支付
+        /// CLOSED—已关闭
+        /// REVOKED—已撤销（刷卡支付）
+        /// USERPAYING--用户支付中
+        /// PAYERROR--支付失败(其他原因，如银行返回失败)
+        /// </summary>
+        public string trade_state { get; set; }
 
         /// <summary>
         /// 付款银行
@@ -71,5 +91,10 @@
         /// 支付完成时间
         /// </summary>
         public string time_end { get; set; }
+
+        /// <summary>
+        /// 交易状态描述
+        /// </summary>
+        public string trade_state_desc { get; set; }
     }
 }

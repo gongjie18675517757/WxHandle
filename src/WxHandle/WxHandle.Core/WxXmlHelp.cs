@@ -67,7 +67,7 @@ namespace WxHandle.Core
             return doc.OuterXml;
         }
 
-        public string MD5(string input, Encoding encode = null)
+        private string MD5(string input, Encoding encode = null)
         {
             if (string.IsNullOrWhiteSpace(input))
                 return "";
@@ -81,23 +81,22 @@ namespace WxHandle.Core
             return sBuilder.ToString();
         }
 
-        public string SHA256(string input, Encoding encode = null)
+        private string HmacSHA256(string input, string key, Encoding encode = null)
         {
             if (string.IsNullOrWhiteSpace(input))
                 return "";
             if (encode == null)
                 encode = Encoding.UTF8;
 
-            byte[] bytes = encode.GetBytes(input);
-            byte[] hash = System.Security.Cryptography.SHA256.Create().ComputeHash(bytes);
+            var secret = key;
 
-            StringBuilder builder = new StringBuilder();
-            for (int i = 0; i < hash.Length; i++)
+            byte[] keyByte = encode.GetBytes(secret);
+            byte[] messageBytes = encode.GetBytes(input);
+            using (var hmacsha256 = new HMACSHA256(keyByte))
             {
-                builder.Append(hash[i].ToString("X2"));
+                byte[] hashmessage = hmacsha256.ComputeHash(messageBytes);
+                return BitConverter.ToString(hashmessage).Replace("-", "");
             }
-
-            return builder.ToString();
         }
 
         /// <summary>
@@ -130,18 +129,18 @@ namespace WxHandle.Core
 
             /*第一步*/
             foreach (var kv in values)
-                signUrlbuilder.Add($"{kv.Value}={kv.Value}");
+                signUrlbuilder.Add($"{kv.Key}={kv.Value}");
             signUrl = string.Join("&", signUrlbuilder);
 
             /*第二步*/
-            signUrl = $"{signUrl}&key=${options.Value.PayKey}";
+            signUrl = $"{signUrl}&key={options.Value.PayKey}";
             switch (options.Value.SignMode)
             {
                 case SignMode.MD5:
                     sign = MD5(signUrl).ToUpper();
                     break;
-                case SignMode.SHA256:
-                    sign = SHA256(signUrl).ToUpper();
+                case SignMode.HmacSHA256:
+                    sign = HmacSHA256(signUrl, options.Value.PayKey).ToUpper();
                     break;
                 default:
                     break;

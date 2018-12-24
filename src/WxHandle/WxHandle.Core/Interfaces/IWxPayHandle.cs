@@ -3,10 +3,12 @@ using WxHandle.Core.Models;
 
 namespace WxHandle.Core.Interfaces
 {
-    public interface IWxHandle
+    public interface IWxPayHandle
     {
-        Task<IWxResult> PayCallback(PayCallbackData wxResult);
+        Task PayCallback(PayCallbackData wxResult);
 
         Task<SendPayResult> SendPay(SendPayInput input);
+
+        Task<QueryOrderOutput> QueryOrder(QueryOrderInput input);
     }
 }

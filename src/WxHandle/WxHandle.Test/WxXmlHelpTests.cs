@@ -142,20 +142,46 @@ namespace WxHandle.Test
 
             Assert.IsTrue(unitUnderTest.CompareXml(result,xml));
         }
-
+         
         [TestMethod]
-        public void CreateSign_StateUnderTest_ExpectedBehavior()
+        public void CreateSign_MD5_StateUnderTest_ExpectedBehavior()
         {
             var mocker = new AutoMoqer();
             mocker.GetMock<IOptions<WxConfig>>().Setup(x => x.Value).Returns(new WxConfig()
             {
-
-            });
+                PayKey= "192006250b4c09247ec02edce69f6a2d",
+                SignMode=SignMode.MD5
+            }); 
+       
             var unitUnderTest = mocker.Create<WxXmlHelp>();
 
             var todo = unitUnderTest.ReadFromXml<PayCallbackData>(xml);
+            var newxml = unitUnderTest.WriteToXml(todo);
 
-            Assert.Fail();
+            var sign = unitUnderTest.CreateSign(todo);
+
+            
+            Assert.AreEqual("424A19186D0092B11404CF00E0B15265", sign);
+        }
+
+        [TestMethod]
+        public void CreateSign_SHA256_StateUnderTest_ExpectedBehavior()
+        {
+            var mocker = new AutoMoqer();
+            mocker.GetMock<IOptions<WxConfig>>().Setup(x => x.Value).Returns(new WxConfig()
+            {
+                PayKey = "192006250b4c09247ec02edce69f6a2d",
+                SignMode = SignMode.HmacSHA256
+            });
+
+            var unitUnderTest = mocker.Create<WxXmlHelp>();
+
+            var todo = unitUnderTest.ReadFromXml<PayCallbackData>(xml);
+            var newxml = unitUnderTest.WriteToXml(todo);
+
+            var sign = unitUnderTest.CreateSign(todo);
+
+            Assert.AreEqual("90C202674D0F1E0C2B1755FD1FE175B810760C02EB14B2B414B0971E5BD6CDD7", sign);         
         }
     }
 }
