@@ -11,4 +11,9 @@ namespace WxHandle.Core.Interfaces
 
         Task<QueryOrderOutput> QueryOrder(QueryOrderInput input);
     }
+
+    public interface IWxHandle
+    {
+
+    }
 }

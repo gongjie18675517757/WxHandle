@@ -22,15 +22,15 @@ namespace WxHandle.Core
             this.xmlHelp = xmlHelp;
         }
 
-        Task IWxPayHandle.PayCallback(PayCallbackData wxResult)
+        public virtual async Task PayCallback(PayCallbackData wxResult)
         {
-           var sign= xmlHelp.CreateSign(wxResult);
+            var sign = xmlHelp.CreateSign(wxResult);
             if (sign != wxResult.sign)
                 throw new System.Exception("签名不正确");
-            return Task.CompletedTask;
+            await Task.CompletedTask;
         }
 
-        async Task<QueryOrderOutput> IWxPayHandle.QueryOrder(QueryOrderInput input)
+        public async Task<QueryOrderOutput> QueryOrder(QueryOrderInput input)
         {
             if (!input.Verify(out var errs))
                 throw new VerifyException("参数错误", errs);
@@ -49,7 +49,7 @@ namespace WxHandle.Core
             return result;
         }
 
-        async Task<SendPayResult> IWxPayHandle.SendPay(SendPayInput input)
+        public async Task<SendPayResult> SendPay(SendPayInput input)
         {
             input.appid = input.appid ?? options.Value.AppId;
             input.mch_id = input.mch_id ?? options.Value.Mch_Id;
@@ -72,6 +72,6 @@ namespace WxHandle.Core
             var result = xmlHelp.ReadFromXml<SendPayResult>(await httpResponseMessage.Content.ReadAsStringAsync());
 
             return result;
-        }        
+        }
     }
 }

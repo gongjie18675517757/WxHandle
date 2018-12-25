@@ -3,9 +3,29 @@
     public class WxConfig
     {
         /// <summary>
+        /// 公众号通知路径
+        /// </summary>
+        public string Wx_Notify_Url { get; set; }
+
+        /// <summary>
         /// 应用ID
         /// </summary>
         public string AppId { get; set; }
+
+        /// <summary>
+        /// 开发者密码
+        /// </summary>
+        public string AppSecret { get; set; }
+
+        /// <summary>
+        /// 令牌
+        /// </summary>
+        public string Token { get; set; }
+
+        /// <summary>
+        /// 消息加解密密钥
+        /// </summary>
+        public string EncodingAESKey { get; set; }
 
         /// <summary>
         /// 商户ID

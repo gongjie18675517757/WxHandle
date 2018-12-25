@@ -15,6 +15,8 @@ namespace WxHandle.Core
         public static IServiceCollection AddWxHandle(this IServiceCollection services, IConfigurationSection configuration)
         {
             services.Configure<WxConfig>(configuration);
+            services.AddHttpClient();
+            services.AddScoped<WxXmlHelp>();
             return services;
         }
     }
