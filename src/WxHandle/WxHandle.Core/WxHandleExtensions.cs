@@ -16,6 +16,7 @@ namespace WxHandle.Core
         {
             services.Configure<WxConfig>(configuration);
             services.AddHttpClient();
+            services.AddMemoryCache();
             services.AddScoped<WxXmlHelp>();
             return services;
         }

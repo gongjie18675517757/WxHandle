@@ -41,7 +41,7 @@ namespace WxHandle.Core
             var xml = xmlHelp.WriteToXml(input);
 
             /*发送请求*/
-            var httpResponseMessage = await httpClientFactory.CreateClient().PostAsync(options.Value.Server.SendPayAddress, new StringContent(xml, Encoding.UTF8, "text/xml"));
+            var httpResponseMessage = await httpClientFactory.CreateClient().PostAsync(options.Value.PayServerConfig.SendPayAddress, new StringContent(xml, Encoding.UTF8, "text/xml"));
 
             /*响应*/
             var result = xmlHelp.ReadFromXml<QueryOrderOutput>(await httpResponseMessage.Content.ReadAsStringAsync());
@@ -66,7 +66,7 @@ namespace WxHandle.Core
             var xml = xmlHelp.WriteToXml(input);
 
             /*发送请求*/
-            var httpResponseMessage = await httpClientFactory.CreateClient().PostAsync(options.Value.Server.SendPayAddress, new StringContent(xml, Encoding.UTF8, "text/xml"));
+            var httpResponseMessage = await httpClientFactory.CreateClient().PostAsync(options.Value.PayServerConfig.SendPayAddress, new StringContent(xml, Encoding.UTF8, "text/xml"));
 
             /*响应*/
             var result = xmlHelp.ReadFromXml<SendPayResult>(await httpResponseMessage.Content.ReadAsStringAsync());

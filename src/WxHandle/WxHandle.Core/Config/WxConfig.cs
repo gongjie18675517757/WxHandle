@@ -48,8 +48,13 @@
         public string Pay_Notify_Url { get; set; }
 
         /// <summary>
-        /// 微信服务器配置
+        /// 微信支付服务器配置
         /// </summary>
-        public WxServerConfig Server { get; set; } = new WxServerConfig();
+        public WxPayServerConfig PayServerConfig { get; set; } = new WxPayServerConfig();
+
+        /// <summary>
+        /// 微信公众号服务器配置
+        /// </summary>
+        public WxServerConfig ServerConfig { get; set; } = new WxServerConfig();
     }
 }
